@@ -1,3 +1,29 @@
 mysql -u htth -p
 php artisan migrate
 => api.ph
+
+
+git init
+git add .
+git commit -m "clean"
+
+
+php artisan make:model Product --all
+php artisan make:controller ProductApiController --api
+=>product table
+php artisan migrate
+php artisan serve
+
+
+=>Test Api using Postman
+=> create workspace
+=> create collection
+=> new request
+
+=>post method(store) => body form data
+              => error => headers
+
+=> Model:create() => fillable must be declared
+
+=> Update => put => update all => x-www-form-urlencoded
+          => patch =>  update partially => x-www-form-urlencoded

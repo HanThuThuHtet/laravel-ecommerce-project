@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +19,9 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get("/me",function (){
-    return "han thu thu htet";
-});
+// Route::get("/me",function (){
+//     return "han thu thu htet";
+// });
+
+Route::apiResource('products',ProductApiController::class);
 
