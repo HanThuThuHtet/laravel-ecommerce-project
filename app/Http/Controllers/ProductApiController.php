@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Photo;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -24,13 +25,24 @@ class ProductApiController extends Controller
         $request->validate([
             "name" => "required|min:3|max:50",
             "price" => "required|numeric|min:1",
-            "stock" => "required|numeric|min:1"
+            "stock" => "required|numeric|min:1",
+            "photos" => "required",
+            "photos.*" => "file|mimes:jpeg,png|max:512"
         ]);
         $product = Product::create([
             "name" => $request->name,
             "price" => $request->price,
             "stock" => $request->stock
         ]);
+        $photos = [];
+        foreach ($request->file('photos') as $key=>$photo) {
+            $newName = $photo->store("public"); //storage/app/public
+
+            //Inserting and Updating Related Model
+            $photos["key"] = new Photo(['name'=>$newName]);
+        }
+        $product->photos()->saveMany($photos); //using relation
+
         return response()->json($product); //json(data,status code)
     }
 

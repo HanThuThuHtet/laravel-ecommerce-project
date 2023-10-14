@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductApiController;
+use App\Http\Controllers\PhotoApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,4 +25,5 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::apiResource('products',ProductApiController::class);
+Route::apiResource('photos',PhotoApiController::class);
 
