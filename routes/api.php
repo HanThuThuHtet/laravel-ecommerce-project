@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Route;
 //     return "han thu thu htet";
 // });
 
-Route::apiResource('products',ProductApiController::class);
-Route::apiResource('photos',PhotoApiController::class);
+Route::middleware('auth:sanctum')->group(function(){
+    Route::apiResource('products',ProductApiController::class);
+    Route::apiResource('photos',PhotoApiController::class);
+});
 
