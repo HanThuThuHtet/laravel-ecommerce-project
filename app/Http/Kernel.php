@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\ControlProduct;
+use App\Http\Middleware\ResponseJson;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -40,9 +41,11 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            ResponseJson::class,
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+
         ],
     ];
 
