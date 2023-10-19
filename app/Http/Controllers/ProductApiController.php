@@ -6,6 +6,7 @@ use App\Models\Photo;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\ProductResource;
 
 class ProductApiController extends Controller
 {
@@ -58,7 +59,7 @@ class ProductApiController extends Controller
         if(is_null($product)){
             return response()->json(["message"=>"Product is not Found"],404);
         }
-        return $product;
+        return new ProductResource($product);
     }
 
     /**
