@@ -15,7 +15,7 @@ class ProductApiController extends Controller
      */
     public function index()
     {
-        $products = Product::latest("id")->paginate(10);
+        $products = Product::latest("id")->paginate(10)->onEachSide(1);
         // return response()->json($products,200);
         return ProductResource::collection($products);
     }
@@ -25,6 +25,7 @@ class ProductApiController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             "name" => "required|min:3|max:50",
             "price" => "required|numeric|min:1",
@@ -32,6 +33,7 @@ class ProductApiController extends Controller
             "photos" => "required",
             "photos.*" => "file|mimes:jpeg,png|max:512"
         ]);
+
         $product = Product::create([
             "name" => $request->name,
             "price" => $request->price,
@@ -47,7 +49,11 @@ class ProductApiController extends Controller
         }
         $product->photos()->saveMany($photos); //using relation
 
-        return response()->json($product); //json(data,status code)
+        return response()->json([
+            "message" => "Product Created",
+            "success" => true,
+            "product" => new ProductResource($product)
+        ]); //json(data,status code)
     }
 
     /**
@@ -67,6 +73,7 @@ class ProductApiController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
         $request->validate([
             "name" => "nullable|min:3|max:50",
             "price" => "nullable|numeric|min:1",
@@ -88,7 +95,11 @@ class ProductApiController extends Controller
         }
         $product->update();
 
-        return response()->json($product);
+        return response()->json([
+            "message" => "Product Updated",
+            "success" => true,
+            "product" => new ProductResource($product)
+        ]);
     }
 
     /**
@@ -101,6 +112,6 @@ class ProductApiController extends Controller
             return response()->json(["message"=>"Product is not Found"],404);
         }
         $product->delete();
-        return response()->json(["message"=>"Product is Deleted"],204);
+        return response()->json(["message"=>"Product is Deleted"],200);
     }
 }

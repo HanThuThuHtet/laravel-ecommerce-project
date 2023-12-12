@@ -25,18 +25,20 @@ use Illuminate\Support\Facades\Route;
 //     return "han thu thu htet";
 // });
 
-Route::post('/register',[ApiAuthController::class,'register'])->name('api.register');
-Route::post('/login',[ApiAuthController::class,'login'])->name('api.login');
+Route::prefix("v1")->group(function (){
 
-Route::middleware('auth:sanctum')->group(function(){
+    Route::post('/register',[ApiAuthController::class,'register'])->name('api.register');
+    Route::post('/login',[ApiAuthController::class,'login'])->name('api.login');
 
-    Route::post('/logout',[ApiAuthController::class,'logout'])->name('api.logout');
-    Route::post('/logout-all',[ApiAuthController::class,'logoutAll'])->name('api.logout-all');
-    Route::post('/logout-except',[ApiAuthController::class,'logoutExcept'])->name('api.logout-except');
+    Route::middleware('auth:sanctum')->group(function(){
 
-    Route::get('/tokens',[ApiAuthController::class,'tokens'])->name('api.tokens');
+        Route::post('/logout',[ApiAuthController::class,'logout'])->name('api.logout');
+        Route::post('/logout-all',[ApiAuthController::class,'logoutAll'])->name('api.logout-all');
+        Route::post('/logout-except',[ApiAuthController::class,'logoutExcept'])->name('api.logout-except');
 
-    Route::apiResource('products',ProductApiController::class);
-    Route::apiResource('photos',PhotoApiController::class);
+        Route::get('/tokens',[ApiAuthController::class,'tokens'])->name('api.tokens');
+
+        Route::apiResource('products',ProductApiController::class);
+        Route::apiResource('photos',PhotoApiController::class);
+    });
 });
-

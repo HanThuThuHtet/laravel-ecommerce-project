@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,12 +24,15 @@ class ApiAuthController extends Controller
             "password" => Hash::make($request->password)
         ]);
 
-        if(Auth::attempt($request->only(['email','password']))){
-           $token = Auth::user()->createToken("phone")->plainTextToken;
-           return response()->json($token);
-        }
+        // if(Auth::attempt($request->only(['email','password']))){
+        //    $token = Auth::user()->createToken("phone")->plainTextToken;
+        //    return response()->json($token);
+        // }
 
-        return response()->json(["message" => "User Not Found"],401);
+        return response()->json([
+            "message" => "Registration Successful.",
+            "success" => true
+        ],200);
 
     }
     public function login(Request $request){
@@ -36,16 +40,29 @@ class ApiAuthController extends Controller
             "email" => "required",
             "password" => "required|min:8"
         ]);
+
         if(Auth::attempt($request->only(['email','password']))){
             $token = Auth::user()->createToken("phone")->plainTextToken;
-            return response()->json($token);
+            return response()->json([
+                "message" => "Login Successful.",
+                "success" => true,
+                "token" => $token,
+                "auth" => new UserResource(Auth::user())
+            ]);
          }
-         return response()->json(["message" => "User Not Found"],401);
+         return response()->json([
+            "message" => "User Not Found",
+            "success" => false
+        ],401);
     }
 
     public function logout(){
         Auth::user()->currentAccessToken()->delete();
-        return response()->json(["message" => "Logged out successfully"],204);
+        //return response()->json(["message" => "Logged out successfully"],204);
+        return response()->json([
+            "message" => "Logout Successful",
+            "success" => true
+        ]);
     }
 
     public function logoutAll(){
